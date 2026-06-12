@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الصباح | استوديو تصوير فوتوغرافي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #C9A96E;
+      --gold-lt: #E2C98A;
+      --dark:    #0D0C0B;
+      --darker:  #080807;
+      --mid:     #1A1814;
+      --cream:   #F7F3EE;
+      --text:    #D4CECC;
+      --muted:   #7A7370;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 48px;
+      transition: background .4s, padding .4s;
+    }
+    nav.scrolled {
+      background: rgba(13,12,11,.93);
+      backdrop-filter: blur(10px);
+      padding: 14px 48px;
+      border-bottom: 1px solid rgba(201,169,110,.15);
+    }
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      line-height: 1.1;
+    }
+    .nav-logo span:first-child {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+    .nav-logo span:last-child {
+      font-family: 'Cairo', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: .75;
+      transition: opacity .3s, color .3s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    /* ─── HERO (parallax bg) ─── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* The sliding background panels – each one is a full-cover image */
+    .hero-bg {
+      position: absolute;
+      inset: -15%;           /* extra room so parallax shift doesn't show edges */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* ← the parallax trick */
+      transition: opacity 1.4s ease;
+      will-change: opacity;
+    }
+    /* 4 background images that auto-rotate */
+    .hero-bg-1 { background-image: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1600&q=80'); }
+    .hero-bg-2 { background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80'); opacity: 0; }
+    .hero-bg-3 { background-image: url('https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1600&q=80'); opacity: 0; }
+    .hero-bg-4 { background-image: url('https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80'); opacity: 0; }
+
+    /* dark vignette on top of images */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(13,12,11,.35) 0%,
+        rgba(13,12,11,.1)  40%,
+        rgba(13,12,11,.5)  80%,
+        rgba(13,12,11,.85) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero-eyebrow {
+      font-family: 'Cairo', sans-serif;
+      font-size: 11px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .8s .3s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(62px, 10vw, 120px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--cream);
+      letter-spacing: -1px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s .55s forwards;
+    }
+    .hero-title em {
+      display: block;
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+    .hero-sub {
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .8s .85s forwards;
+    }
+    .hero-cta {
+      display: inline-block;
+      margin-top: 44px;
+      padding: 14px 44px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      transition: background .35s, color .35s;
+      opacity: 0;
+      animation: fadeUp .8s 1.1s forwards;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    /* image indicator dots */
+    .hero-dots {
+      position: absolute;
+      bottom: 38px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 3;
+    }
+    .hero-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(201,169,110,.35);
+      cursor: pointer;
+      transition: background .3s, transform .3s;
+    }
+    .hero-dot.active {
+      background: var(--gold);
+      transform: scale(1.4);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS that scroll over hero ─── */
+    /* Each section has a white/dark card feel that slides above the sticky bg */
+    .section-card {
+      position: relative;
+      z-index: 10;
+      background: var(--dark);
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    .about-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(.9) saturate(.85);
+      transition: transform .6s ease;
+    }
+    .about-image:hover img { transform: scale(1.03); }
+    .about-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,169,110,.12) 0%, transparent 60%);
+    }
+    .about-text {
+      padding: 80px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4vw, 54px);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--gold-lt); }
+    .section-body {
+      font-size: 15px;
+      line-height: 2;
+      color: var(--muted);
+      max-width: 480px;
+    }
+    .gold-divider {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      margin: 28px 0;
+    }
+
+    /* ─── SERVICES ─── */
+    #services {
+      background: var(--mid);
+      padding: 100px 60px;
+      text-align: center;
+    }
+    #services .section-label { margin-bottom: 12px; }
+    #services .section-title { margin: 0 auto 60px; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: var(--dark);
+      padding: 52px 36px;
+      text-align: right;
+      transition: background .3s;
+      cursor: default;
+    }
+    .service-card:hover { background: #131210; }
+    .service-icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 14px;
+    }
+    .service-card p {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio {
+      padding: 100px 60px;
+    }
+    #portfolio .section-label { text-align: center; }
+    #portfolio .section-title { text-align: center; margin: 0 auto 16px; }
+    #portfolio .section-body  { text-align: center; margin: 0 auto 60px; max-width: 560px; }
+
+    .portfolio-filter {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 8px 22px;
+      background: transparent;
+      border: 1px solid rgba(201,169,110,.3);
+      color: var(--muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .3s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .portfolio-item {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .portfolio-item.wide { grid-column: span 2; aspect-ratio: auto; }
+    .portfolio-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s ease;
+      filter: brightness(.85) saturate(.7);
+    }
+    .portfolio-item:hover img {
+      transform: scale(1.06);
+      filter: brightness(.95) saturate(1);
+    }
+    .portfolio-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(13,12,11,0);
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      transition: background .4s;
+    }
+    .portfolio-item:hover .portfolio-item-overlay {
+      background: rgba(13,12,11,.5);
+    }
+    .portfolio-item-label {
+      color: var(--cream);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .4s;
+    }
+    .portfolio-item:hover .portfolio-item-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── PARALLAX QUOTE BANNER ─── */
+    #quote-banner {
+      position: relative;
+      height: 50vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qb-bg {
+      position: absolute;
+      inset: -20%;
+      background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: brightness(.35) saturate(.5);
+    }
+    .qb-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .qb-content blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 4vw, 48px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.4;
+      max-width: 800px;
+    }
+    .qb-content cite {
+      display: block;
+      margin-top: 18px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials {
+      background: var(--mid);
+      padding: 100px 60px;
+      text-align: center;
+    }
+    .testimonials-track {
+      display: flex;
+      gap: 28px;
+      max-width: 1100px;
+      margin: 60px auto 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .testimonial {
+      background: var(--dark);
+      padding: 44px 38px;
+      max-width: 340px;
+      text-align: right;
+      border-top: 2px solid var(--gold);
+    }
+    .testimonial p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .testimonial cite {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      padding: 100px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .contact-info .section-label { margin-bottom: 14px; }
+    .contact-info .section-title { margin-bottom: 24px; }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .contact-detail-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-detail-text {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+    .contact-detail-text strong {
+      display: block;
+      color: var(--cream);
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--mid);
+      border: 1px solid rgba(201,169,110,.2);
+      color: var(--text);
+      padding: 14px 16px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border .3s;
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select option { background: var(--mid); }
+    .btn-send {
+      padding: 16px 48px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background .3s, color .3s;
+    }
+    .btn-send:hover { background: var(--gold); color: var(--dark); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--darker);
+      padding: 52px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(201,169,110,.1);
+    }
+    .footer-logo span:first-child {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
+    .footer-logo span:last-child {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .footer-social { display: flex; gap: 18px; }
+    .footer-social a {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+    .footer-social a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      nav.scrolled { padding: 12px 24px; }
+      .nav-links { display: none; }
+      #about { grid-template-columns: 1fr; }
+      .about-image { height: 50vw; }
+      .about-text { padding: 52px 28px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+      .portfolio-item.wide { grid-column: span 2; }
+      #contact { grid-template-columns: 1fr; padding: 60px 28px; }
+      footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 24px; }
+      #services, #portfolio, #testimonials { padding: 72px 24px; }
+    }
+    @media (max-width: 600px) {
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-item.wide { grid-column: span 1; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-bg { background-attachment: scroll; }
+      .qb-bg   { background-attachment: scroll; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <span>الصباح</span>
+    <span>EL-SUBBAH STUDIO</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">عن الاستوديو</a></li>
+    <li><a href="#services">الخدمات</a></li>
+    <li><a href="#portfolio">الأعمال</a></li>
+    <li><a href="#contact">تواصل معنا</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg hero-bg-1" id="bg1"></div>
+  <div class="hero-bg hero-bg-2" id="bg2"></div>
+  <div class="hero-bg hero-bg-3" id="bg3"></div>
+  <div class="hero-bg hero-bg-4" id="bg4"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">EL-SUBBAH STUDIO • استوديو الصباح</p>
+    <h1 class="hero-title">
+      نصنع<em>اللحظات</em>
+    </h1>
+    <p class="hero-sub">تصوير فوتوغرافي احترافي • القاهرة، مصر</p>
+    <a href="#contact" class="hero-cta">احجز جلستك</a>
+  </div>
+
+  <div class="hero-dots">
+    <div class="hero-dot active" onclick="goToSlide(0)"></div>
+    <div class="hero-dot" onclick="goToSlide(1)"></div>
+    <div class="hero-dot" onclick="goToSlide(2)"></div>
+    <div class="hero-dot" onclick="goToSlide(3)"></div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about" class="section-card">
+  <div class="about-image reveal">
+    <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=900&q=80" alt="الاستوديو" loading="lazy" />
+  </div>
+  <div class="about-text reveal">
+    <p class="section-label">من نحن</p>
+    <h2 class="section-title">نؤمن أن كل لحظة<em>تستحق</em></h2>
+    <div class="gold-divider"></div>
+    <p class="section-body">
+      استوديو الصباح هو وجهتك للتصوير الاحترافي بأسلوب فني راقٍ. نتخصص في تصوير حفلات الأعراس، جلسات الخطوبة، البورتريه، وصور العائلة — مع اهتمام بالغ بكل تفصيلة لتكون ذكراك خالدة بصورة أبدية.
+    </p>
+    <div class="gold-divider"></div>
+    <p class="section-body" style="font-family:'Cormorant Garamond',serif; font-size:18px; font-style:italic; color:var(--text);">
+      "نلتقط الضوء، نحكي القصة، نوثّق الجمال."
+    </p>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section id="services" class="section-card">
+  <p class="section-label reveal">ما نقدمه</p>
+  <h2 class="section-title reveal">خدماتنا</h2>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon">💍</span>
+      <h3>تصوير الأعراس</h3>
+      <p>نوثّق كل تفصيلة من يومك الأهم بأسلوب سينمائي فني — من الاستعداد حتى آخر لحظة في الليل.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">✨</span>
+      <h3>جلسات الخطوبة</h3>
+      <p>صور تعكس حبّكم بشكل حقيقي وطبيعي — في الأماكن المفتوحة أو داخل الاستوديو المجهّز.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">📸</span>
+      <h3>بورتريه واستوديو</h3>
+      <p>جلسات بورتريه احترافية للأفراد والعائلات — بإضاءة ناعمة واتجاه إبداعي متميز.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PORTFOLIO ─── -->
+<section id="portfolio" class="section-card">
+  <p class="section-label reveal">معرض الأعمال</p>
+  <h2 class="section-title reveal">من أحدث <em>أعمالنا</em></h2>
+  <p class="section-body reveal">لحظات حقيقية، ضوء مقصود، وذاكرة لا تُنسى</p>
+
+  <div class="portfolio-filter reveal">
+    <button class="filter-btn active">الكل</button>
+    <button class="filter-btn">أعراس</button>
+    <button class="filter-btn">خطوبة</button>
+    <button class="filter-btn">استوديو</button>
+    <button class="filter-btn">عائلات</button>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-item wide reveal">
+      <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">زفاف</span></div>
+    </div>
+    <div class="portfolio-item reveal">
+      <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">بورتريه</span></div>
+    </div>
+    <div class="portfolio-item reveal">
+      <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">خطوبة</span></div>
+    </div>
+    <div class="portfolio-item reveal">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">زفاف</span></div>
+    </div>
+    <div class="portfolio-item wide reveal">
+      <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=900&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">حفل زفاف</span></div>
+    </div>
+    <div class="portfolio-item reveal">
+      <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=600&q=80" alt="" loading="lazy" />
+      <div class="portfolio-item-overlay"><span class="portfolio-item-label">استوديو</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUOTE BANNER (parallax) ─── -->
+<section id="quote-banner" class="section-card">
+  <div class="qb-bg"></div>
+  <div class="qb-content">
+    <blockquote>"الصورة الجيدة هي تلك التي تشعر بها قبل أن تراها"</blockquote>
+    <cite>استوديو الصباح • EL-SUBBAH STUDIO</cite>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials" class="section-card">
+  <p class="section-label reveal">آراء عملائنا</p>
+  <h2 class="section-title reveal">قالوا عنّا</h2>
+  <div class="testimonials-track">
+    <div class="testimonial reveal">
+      <p>"جلسة الخطوبة كانت فوق كل توقعاتنا — الإضاءة والتوجيه كانوا محترفين جداً والصور طلعت خيالية."</p>
+      <cite>— سارة وأحمد</cite>
+    </div>
+    <div class="testimonial reveal">
+      <p>"غطّوا زفافنا بشكل استثنائي. كل لحظة تم توثيقها بعين فنية ودقيقة. شكراً استوديو الصباح!"</p>
+      <cite>— منى وعمر</cite>
+    </div>
+    <div class="testimonial reveal">
+      <p>"جلسة العائلة كانت ممتعة والنتيجة كانت مذهلة. فريق محترف وودود جداً."</p>
+      <cite>— عائلة المصري</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact" class="section-card">
+  <div class="contact-info reveal">
+    <p class="section-label">تواصل معنا</p>
+    <h2 class="section-title">لنبدأ <em>قصتك</em></h2>
+    <div class="gold-divider"></div>
+    <p class="section-body" style="margin-bottom:40px;">
+      احجز جلستك الآن أو تواصل معنا لمعرفة المزيد عن الباقات والأسعار.
+    </p>
+    <div class="contact-detail">
+      <span class="contact-detail-icon">📍</span>
+      <div class="contact-detail-text">
+        <strong>العنوان</strong>
+        القاهرة، مصر
+      </div>
+    </div>
+    <div class="contact-detail">
+      <span class="contact-detail-icon">📞</span>
+      <div class="contact-detail-text">
+        <strong>الهاتف</strong>
+        +20 10 0000 0000
+      </div>
+    </div>
+    <div class="contact-detail">
+      <span class="contact-detail-icon">📸</span>
+      <div class="contact-detail-text">
+        <strong>إنستغرام</strong>
+        @elsubbah.studio
+      </div>
+    </div>
+  </div>
+
+  <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group">
+        <label>الاسم الأول</label>
+        <input type="text" placeholder="محمد" required />
+      </div>
+      <div class="form-group">
+        <label>الاسم الأخير</label>
+        <input type="text" placeholder="أحمد" required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>رقم الهاتف</label>
+      <input type="tel" placeholder="+20 10 0000 0000" required />
+    </div>
+    <div class="form-group">
+      <label>البريد الإلكتروني</label>
+      <input type="email" placeholder="example@email.com" />
+    </div>
+    <div class="form-group">
+      <label>نوع الجلسة</label>
+      <select required>
+        <option value="" disabled selected>اختر...</option>
+        <option>تصوير زفاف</option>
+        <option>جلسة خطوبة</option>
+        <option>بورتريه / استوديو</option>
+        <option>تصوير عائلي</option>
+        <option>أخرى</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>رسالتك</label>
+      <textarea placeholder="أخبرنا عن المناسبة وتاريخها..."></textarea>
+    </div>
+    <button type="submit" class="btn-send">إرسال الطلب</button>
+  </form>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">
+    <span>الصباح</span>
+    <span>EL-SUBBAH STUDIO</span>
+  </div>
+  <p class="footer-copy">© 2026 El-Subbah Studio. جميع الحقوق محفوظة.</p>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">Facebook</a>
+    <a href="#">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+  /* ── Navbar scroll ── */
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── Hero slideshow ── */
+  const bgs   = ['bg1','bg2','bg3','bg4'].map(id => document.getElementById(id));
+  const dots  = document.querySelectorAll('.hero-dot');
+  let current = 0, timer;
+
+  function goToSlide(idx) {
+    bgs[current].style.opacity = '0';
+    dots[current].classList.remove('active');
+    current = idx;
+    bgs[current].style.opacity = '1';
+    dots[current].classList.add('active');
+    clearInterval(timer);
+    timer = setInterval(nextSlide, 5000);
+  }
+
+  function nextSlide() {
+    goToSlide((current + 1) % bgs.length);
+  }
+
+  timer = setInterval(nextSlide, 5000);
+
+  /* ── Scroll reveal ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  /* ── Portfolio filter ── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.filter-btn.active').classList.remove('active');
+      btn.classList.add('active');
+    });
+  });
+
+  /* ── Contact form ── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-send');
+    btn.textContent = '✓ تم الإرسال';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--dark)';
+    setTimeout(() => {
+      btn.textContent = 'إرسال الطلب';
+      btn.style.background = '';
+      btn.style.color = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
