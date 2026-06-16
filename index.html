@@ -1,12 +1,3 @@
-أنا بعتذر لك جداً، معاك حق 100%! الصورة الأخيرة دي كشفت لي المشكلة كلها بوضوح.
-
-اللي حصل إن الأكواد اللي فاتت كانت بترمي الكلمة الأولى (فيسبوك) في مكان الزرار التاني (واتساب) بالضبط، وده عمل "تشفيت" أو ترحيل لكل الزراير خطوة كاملة لتحت.
-
-أنا حسبت المسافات بالورقة والقلم بناءً على الترحيل اللي في صورتك الأخيرة، ورفعت كل الحقول لفوق "درجة كاملة" (حوالي 7.5%)، وظبطت الميل بتاعهم عشان يمشوا مع ميل التصميم بالملي.
-
-جرب الكود ده دلوقتي، وأوعدك إن شاء الله هتلاقي كل كلمة راكبة في نص المستطيل الأسود بتاعها بالضبط:
-
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -39,6 +30,7 @@
       max-width: 450px;
       margin: 0 auto;
       line-height: 0;
+      background-color: #000;
     }
 
     .bg-image {
@@ -52,15 +44,16 @@
       position: absolute;
       display: flex;
       align-items: center;
-      justify-content: center; /* سنترة الكلمة داخل المساحة السوداء */
+      justify-content: center; /* توسيط الكلمة أفقياً داخل المساحة */
       color: #E2C98A;
       text-decoration: none;
-      font-size: clamp(12px, 3.5vw, 16px); 
+      font-size: clamp(12px, 3.5vw, 15px); 
       white-space: nowrap; 
       font-weight: 600;
-      height: 7%;
-      transform: translateY(-50%); /* لضبط الكلمة في المنتصف الرأسي */
+      height: 6%;
+      transform: translateY(-50%); /* التوسيط الرأسي بالملي */
       transition: color 0.3s, text-shadow 0.3s;
+      z-index: 10;
     }
 
     .link-btn:hover {
@@ -69,16 +62,14 @@
     }
 
     /* 
-      === الإحداثيات النهائية المضبوطة ===
-      تم رفع جميع الحقول لأعلى (تقليل top) لتعويض الترحيل
-      وتم ضبط الميل (left) ليتماشى مع تصميم الأزرار
+      === الإحداثيات النهائية المضبوطة بالملي ===
     */
-    .btn-fb    { top: 44.5%; left: 27%; width: 40%; }
-    .btn-wa    { top: 52.0%; left: 31%; width: 40%; }
-    .btn-phone { top: 59.5%; left: 35%; width: 40%; }
-    .btn-home  { top: 67.0%; left: 39%; width: 40%; }
-    .btn-cart  { top: 74.5%; left: 43%; width: 40%; }
-    .btn-gps   { top: 82.0%; left: 47%; width: 40%; }
+    .btn-fb    { top: 51.5%; left: 27%; width: 38%; }
+    .btn-wa    { top: 58.8%; left: 32%; width: 38%; }
+    .btn-phone { top: 66.1%; left: 37%; width: 38%; }
+    .btn-home  { top: 73.4%; left: 42%; width: 38%; }
+    .btn-cart  { top: 80.7%; left: 47%; width: 38%; }
+    .btn-gps   { top: 88.0%; left: 52%; width: 38%; }
 
 
     /* تنسيق النوافذ المنبثقة (Modals) */
@@ -228,5 +219,3 @@
 
 </body>
 </html>
-
-```
