@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>استوديو الصباح</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0c;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* الغلاف الكامل — نسبة الصورة 1152:2048 = 9:16 */
+    .page {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      /* نحافظ على نسبة الصورة */
+      aspect-ratio: 1152 / 2048;
+    }
+
+    /* الصورة كخلفية كاملة */
+    .page img.bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* طبقة الأزرار الشفافة فوق الصورة */
+    .overlay {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* كل زر شفاف بالكامل فوق زر الصورة */
+    .btn {
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      /* شفاف تماماً — بس الضغط شغال */
+      background: transparent;
+      border: none;
+      padding: 0;
+      /* للتأكد إن المنطقة كلها قابلة للضغط */
+      width: 75%;
+    }
+
+    /* مساحة النص داخل الزر — شفافة */
+    .btn-text {
+      flex: 1;
+      text-align: center;
+      font-family: 'Cairo', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      color: rgba(220, 200, 150, 0.85);
+      letter-spacing: 1px;
+      /* الحجم هيتحدد حسب حجم الشاشة */
+      font-size: clamp(11px, 2.8vw, 16px);
+    }
+
+    /* ── مواضع الأزرار الستة (% من ارتفاع الصورة) ── */
+    /* فيسبوك */
+    .btn-fb {
+      top: 55.5%;
+      height: 7%;
+      right: 7%;
+      width: 72%;
+    }
+    /* واتساب */
+    .btn-wa {
+      top: 62.8%;
+      height: 7%;
+      right: 9%;
+      width: 72%;
+    }
+    /* اتصال */
+    .btn-call {
+      top: 70%;
+      height: 7%;
+      right: 11%;
+      width: 72%;
+    }
+    /* فروعنا */
+    .btn-branches {
+      top: 77.2%;
+      height: 7%;
+      right: 13%;
+      width: 72%;
+    }
+    /* عروض */
+    .btn-offers {
+      top: 84.3%;
+      height: 7%;
+      right: 14%;
+      width: 72%;
+    }
+    /* خريطة */
+    .btn-map {
+      top: 91.2%;
+      height: 7%;
+      right: 16%;
+      width: 72%;
+    }
+
+    /* ── popup الفروع ── */
+    .branches-popup {
+      display: none;
+      position: absolute;
+      right: 9%;
+      width: 75%;
+      background: rgba(10,8,6,.96);
+      border: 1px solid rgba(201,160,64,.4);
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .branches-popup.open { display: block; animation: slideDown .25s ease; }
+    @keyframes slideDown {
+      from { opacity:0; transform:translateY(-8px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .branch-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(201,160,64,.12);
+      color: #d4cecc;
+      font-family: 'Cairo', sans-serif;
+      font-size: clamp(10px, 2.5vw, 14px);
+      text-align: right;
+    }
+    .branch-item:last-child { border-bottom: none; }
+    .branch-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #c9a040;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 500px) {
+      .page { max-width: 430px; margin: 0 auto; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- الصورة خلفية -->
+  <img class="bg" src="bg.png" alt="استوديو الصباح" />
+
+  <!-- الأزرار الشفافة فوق الصورة -->
+  <div class="overlay">
+
+    <!-- فيسبوك -->
+    <a class="btn btn-fb"
+       href="https://www.facebook.com/Tamer.Elsubbah.Photographer"
+       target="_blank" rel="noopener">
+      <span class="btn-text">فيسبوك</span>
+    </a>
+
+    <!-- واتساب -->
+    <a class="btn btn-wa"
+       href="https://wa.me/201009892555"
+       target="_blank" rel="noopener">
+      <span class="btn-text">واتساب</span>
+    </a>
+
+    <!-- اتصال -->
+    <a class="btn btn-call" href="tel:+201009892555">
+      <span class="btn-text">اتصل بنا — 01009892555</span>
+    </a>
+
+    <!-- فروعنا -->
+    <button class="btn btn-branches" onclick="toggleBranches(event)">
+      <span class="btn-text">فروعنا</span>
+    </button>
+
+    <!-- popup الفروع — يظهر تحت زر فروعنا -->
+    <div class="branches-popup" id="branchesPopup" style="top:84%;">
+      <div class="branch-item"><span class="branch-dot"></span>شيبة — بجوار مركز الشباب</div>
+      <div class="branch-item"><span class="branch-dot"></span>بهنباي — أمام صيدلية الحجر</div>
+      <div class="branch-item"><span class="branch-dot"></span>النخاس — أمام مسجد الفتح</div>
+      <div class="branch-item"><span class="branch-dot"></span>القنايات — بجوار مسجد النصر</div>
+    </div>
+
+    <!-- أحدث العروض -->
+    <a class="btn btn-offers" href="#offers">
+      <span class="btn-text">أحدث العروض</span>
+    </a>
+
+    <!-- خريطة -->
+    <a class="btn btn-map"
+       href="https://maps.app.goo.gl/DGbyZXKT4fXRygFf6"
+       target="_blank" rel="noopener">
+      <span class="btn-text">موقعنا على الخريطة</span>
+    </a>
+
+  </div>
+</div>
+
+<script>
+  function toggleBranches(e) {
+    e.stopPropagation();
+    document.getElementById('branchesPopup').classList.toggle('open');
+  }
+  document.addEventListener('click', function() {
+    document.getElementById('branchesPopup').classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
