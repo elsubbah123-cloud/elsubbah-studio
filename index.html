@@ -6,7 +6,6 @@
   <title>استوديو الصباح | الروابط</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* تصفير أي مسافات عشوائية بيعملها المتصفح */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -22,12 +21,11 @@
       min-height: 100vh;
     }
 
-    /* الحاوية الأساسية اللي بتلم الصورة والكلام */
     .wrapper {
       position: relative;
       width: 100%;
       max-width: 450px;
-      line-height: 0; /* لمنع أي مسافات فاضية تحت الصورة */
+      line-height: 0;
     }
 
     .bg-image {
@@ -44,10 +42,12 @@
       justify-content: center;
       color: #E2C98A;
       text-decoration: none;
-      font-size: clamp(14px, 4vw, 18px); /* خط يتجاوب مع الشاشة */
+      /* تصغير الخط ومنع النزول لسطر جديد */
+      font-size: clamp(12px, 3.2vw, 15px); 
+      white-space: nowrap; 
       font-weight: 600;
       line-height: normal;
-      height: 6%;
+      height: 5%; /* تقليل الارتفاع ليتمركز بشكل أفضل */
       transition: color 0.3s, text-shadow 0.3s;
     }
 
@@ -56,16 +56,16 @@
       text-shadow: 0 0 10px rgba(226, 201, 138, 0.8);
     }
 
-    /* === الإحداثيات الدقيقة الجديدة === */
-    .btn-fb    { top: 48.0%; left: 24%; width: 33%; }
-    .btn-wa    { top: 55.5%; left: 29%; width: 33%; }
-    .btn-phone { top: 63.0%; left: 34%; width: 33%; }
-    .btn-home  { top: 70.5%; left: 39%; width: 33%; }
-    .btn-cart  { top: 78.0%; left: 44%; width: 33%; }
-    .btn-gps   { top: 85.5%; left: 49%; width: 33%; }
+    /* === الإحداثيات الجديدة المضبوطة بناءً على الصورة === */
+    .btn-fb    { top: 50.5%; left: 30%; width: 35%; }
+    .btn-wa    { top: 57.5%; left: 34%; width: 35%; }
+    .btn-phone { top: 64.5%; left: 38%; width: 35%; }
+    .btn-home  { top: 71.5%; left: 42%; width: 35%; }
+    .btn-cart  { top: 78.5%; left: 46%; width: 35%; }
+    .btn-gps   { top: 85.5%; left: 50%; width: 35%; }
 
 
-    /* تنسيق نافذة الفروع (Modal) */
+    /* تنسيق النوافذ المنبثقة (Modals) */
     .modal {
       display: none;
       position: fixed;
@@ -78,7 +78,7 @@
       backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
-      line-height: normal; /* إعادة ضبط المسافات للنافذة */
+      line-height: normal;
     }
     .modal-content {
       background: linear-gradient(145deg, #1A1814, #0D0C0B);
@@ -109,6 +109,8 @@
       margin-bottom: 25px;
       font-family: 'Cairo', sans-serif;
     }
+    
+    /* تنسيق قائمة الفروع */
     .branches-list {
       list-style: none;
       padding: 0;
@@ -128,29 +130,35 @@
       color: #E2C98A;
       margin-left: 5px;
     }
+
+    /* تنسيق محتوى العروض */
+    .offers-content {
+      text-align: center;
+      font-size: 16px;
+      color: #D4CECC;
+      padding: 20px 0;
+    }
   </style>
 </head>
 <body>
 
 <div class="wrapper">
+  <!-- الصورة كخلفية -->
   <img src="land page.jpg" alt="استوديو الصباح" class="bg-image">
 
+  <!-- الروابط -->
   <a href="https://www.facebook.com/Tamer.Elsubbah.Photographer" target="_blank" class="link-btn btn-fb">صفحتنا على فيسبوك</a>
-
   <a href="https://wa.me/201009892555" target="_blank" class="link-btn btn-wa">تواصل عبر واتساب</a>
-
   <a href="tel:+201009892555" class="link-btn btn-phone">اتصل بنا</a>
-
-  <a href="javascript:void(0)" onclick="openModal()" class="link-btn btn-home">فروعنا</a>
-
-  <a href="#offers" class="link-btn btn-cart">أحدث العروض</a>
-
+  <a href="javascript:void(0)" onclick="openBranches()" class="link-btn btn-home">فروعنا</a>
+  <a href="javascript:void(0)" onclick="openOffers()" class="link-btn btn-cart">أحدث العروض</a>
   <a href="https://maps.app.goo.gl/DGbyZXKT4fXRygFf6" target="_blank" class="link-btn btn-gps">عنوان المكان</a>
 </div>
 
+<!-- نافذة الفروع -->
 <div id="branchesModal" class="modal">
   <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">×</span>
+    <span class="close-btn" onclick="closeBranches()">×</span>
     <h2>فروعنا</h2>
     <ul class="branches-list">
       <li><strong>شيبة:</strong> بجوار مركز الشباب</li>
@@ -161,20 +169,45 @@
   </div>
 </div>
 
+<!-- نافذة أحدث العروض -->
+<div id="offersModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeOffers()">×</span>
+    <h2>أحدث العروض</h2>
+    <div class="offers-content">
+      <!-- يمكنك إضافة العروض هنا لاحقاً -->
+      <p>لا توجد عروض حالياً، تابعنا لمعرفة كل جديد!</p>
+    </div>
+  </div>
+</div>
+
 <script>
-  var modal = document.getElementById("branchesModal");
+  var branchesModal = document.getElementById("branchesModal");
+  var offersModal = document.getElementById("offersModal");
 
-  function openModal() {
-    modal.style.display = "flex";
+  function openBranches() {
+    branchesModal.style.display = "flex";
   }
 
-  function closeModal() {
-    modal.style.display = "none";
+  function closeBranches() {
+    branchesModal.style.display = "none";
   }
 
+  function openOffers() {
+    offersModal.style.display = "flex";
+  }
+
+  function closeOffers() {
+    offersModal.style.display = "none";
+  }
+
+  // إغلاق أي نافذة عند الضغط خارجها
   window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (event.target == branchesModal) {
+      branchesModal.style.display = "none";
+    }
+    if (event.target == offersModal) {
+      offersModal.style.display = "none";
     }
   }
 </script>
