@@ -1,8 +1,10 @@
-حقك عليا جداً! غلطة غير مقصودة، اللي حصل إن إعدادات المسافات (Flexbox) مع اتجاه الصفحة العربي (RTL) خلت المتصفح على الشاشات الكبيرة يحدف التصميم كله على الشمال بدل ما يسنتره في النص.
+أنا بعتذر لك جداً، معاك حق 100%! الصورة الأخيرة دي كشفت لي المشكلة كلها بوضوح.
 
-أنا صلحت المشكلة دي فوراً ورجعت الصفحة في "نص الشاشة" بالضبط زي ما كانت. وبالنسبة للكلام داخل الحقول، ظبطت أماكنه جوه المستطيلات السودا عشان يكون متسنتر بشكل أفضل، ورجعت حجم الخط متناسق.
+اللي حصل إن الأكواد اللي فاتت كانت بترمي الكلمة الأولى (فيسبوك) في مكان الزرار التاني (واتساب) بالضبط، وده عمل "تشفيت" أو ترحيل لكل الزراير خطوة كاملة لتحت.
 
-انسخ الكود ده وحطه، وهتلاقي الصفحة رجعت في النص، والكلام مظبوط جوه الحقول:
+أنا حسبت المسافات بالورقة والقلم بناءً على الترحيل اللي في صورتك الأخيرة، ورفعت كل الحقول لفوق "درجة كاملة" (حوالي 7.5%)، وظبطت الميل بتاعهم عشان يمشوا مع ميل التصميم بالملي.
+
+جرب الكود ده دلوقتي، وأوعدك إن شاء الله هتلاقي كل كلمة راكبة في نص المستطيل الأسود بتاعها بالضبط:
 
 ```html
 <!DOCTYPE html>
@@ -19,13 +21,11 @@
       padding: 0;
     }
 
-    /* ضبط خلفية الصفحة بالكامل */
     body {
       background-color: #111;
       font-family: 'Cairo', sans-serif;
     }
 
-    /* حاوية لضمان بقاء التصميم في منتصف الشاشة دائماً */
     .main-container {
       display: flex;
       justify-content: center;
@@ -33,12 +33,11 @@
       min-height: 100vh;
     }
 
-    /* مساحة التصميم نفسها */
     .wrapper {
       position: relative;
       width: 100%;
       max-width: 450px;
-      margin: 0 auto; /* هذا السطر يضمن توسيط الصفحة */
+      margin: 0 auto;
       line-height: 0;
     }
 
@@ -48,19 +47,19 @@
       display: block;
     }
 
-    /* تنسيق أزرار الروابط (الكلام داخل الحقول) */
+    /* التنسيق الموحد للكلمات داخل الحقول */
     .link-btn {
       position: absolute;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: center; /* سنترة الكلمة داخل المساحة السوداء */
       color: #E2C98A;
       text-decoration: none;
-      font-size: clamp(13px, 3.5vw, 16px); 
+      font-size: clamp(12px, 3.5vw, 16px); 
       white-space: nowrap; 
       font-weight: 600;
-      height: 6%;
-      transform: translateY(-50%); /* لتوسيط الكلمة رأسياً بالملي */
+      height: 7%;
+      transform: translateY(-50%); /* لضبط الكلمة في المنتصف الرأسي */
       transition: color 0.3s, text-shadow 0.3s;
     }
 
@@ -69,13 +68,17 @@
       text-shadow: 0 0 10px rgba(226, 201, 138, 0.8);
     }
 
-    /* إحداثيات الكلام ليكون داخل المستطيلات السوداء بالظبط */
-    .btn-fb    { top: 52.0%; left: 32%; width: 38%; }
-    .btn-wa    { top: 59.3%; left: 36%; width: 38%; }
-    .btn-phone { top: 66.5%; left: 40%; width: 38%; }
-    .btn-home  { top: 73.8%; left: 44%; width: 38%; }
-    .btn-cart  { top: 81.0%; left: 48%; width: 38%; }
-    .btn-gps   { top: 88.3%; left: 52%; width: 38%; }
+    /* 
+      === الإحداثيات النهائية المضبوطة ===
+      تم رفع جميع الحقول لأعلى (تقليل top) لتعويض الترحيل
+      وتم ضبط الميل (left) ليتماشى مع تصميم الأزرار
+    */
+    .btn-fb    { top: 44.5%; left: 27%; width: 40%; }
+    .btn-wa    { top: 52.0%; left: 31%; width: 40%; }
+    .btn-phone { top: 59.5%; left: 35%; width: 40%; }
+    .btn-home  { top: 67.0%; left: 39%; width: 40%; }
+    .btn-cart  { top: 74.5%; left: 43%; width: 40%; }
+    .btn-gps   { top: 82.0%; left: 47%; width: 40%; }
 
 
     /* تنسيق النوافذ المنبثقة (Modals) */
@@ -155,8 +158,10 @@
 
 <div class="main-container">
   <div class="wrapper">
+    <!-- الصورة كخلفية -->
     <img src="land page.jpg" alt="استوديو الصباح" class="bg-image">
 
+    <!-- الروابط -->
     <a href="https://www.facebook.com/Tamer.Elsubbah.Photographer" target="_blank" class="link-btn btn-fb">صفحتنا على فيسبوك</a>
     <a href="https://wa.me/201009892555" target="_blank" class="link-btn btn-wa">تواصل عبر واتساب</a>
     <a href="tel:+201009892555" class="link-btn btn-phone">اتصل بنا</a>
@@ -166,6 +171,7 @@
   </div>
 </div>
 
+<!-- نافذة الفروع -->
 <div id="branchesModal" class="modal">
   <div class="modal-content">
     <span class="close-btn" onclick="closeBranches()">×</span>
@@ -179,6 +185,7 @@
   </div>
 </div>
 
+<!-- نافذة أحدث العروض -->
 <div id="offersModal" class="modal">
   <div class="modal-content">
     <span class="close-btn" onclick="closeOffers()">×</span>
@@ -223,5 +230,3 @@
 </html>
 
 ```
-
-هل الأماكن الجديدة للكلام داخل الحقول كدة ظبطت معاك ولا حابب نرحلهم يمين أو شمال درجة كمان؟
