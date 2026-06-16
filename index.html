@@ -6,45 +6,49 @@
   <title>استوديو الصباح | الروابط</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    /* تصفير أي مسافات عشوائية بيعملها المتصفح */
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #111; /* لون خلفية غامق ليتماشى مع حواف الصورة */
+    }
+
+    body {
+      background-color: #111;
       font-family: 'Cairo', sans-serif;
       display: flex;
       justify-content: center;
+      align-items: flex-start;
       min-height: 100vh;
     }
+
+    /* الحاوية الأساسية اللي بتلم الصورة والكلام */
     .wrapper {
       position: relative;
       width: 100%;
-      max-width: 450px; /* مقاس شاشة الموبايل */
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 450px;
+      line-height: 0; /* لمنع أي مسافات فاضية تحت الصورة */
     }
+
     .bg-image {
       width: 100%;
+      height: auto;
       display: block;
     }
 
-    /* إعدادات النصوص داخل الحقول */
+    /* تنسيق أزرار الروابط */
     .link-btn {
       position: absolute;
-      height: 6%; /* ارتفاع الحقل ليتناسب مع التصميم */
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #E2C98A; /* لون ذهبي متناسق مع التصميم */
+      color: #E2C98A;
       text-decoration: none;
-      font-size: 4vw; /* حجم خط متجاوب */
+      font-size: clamp(14px, 4vw, 18px); /* خط يتجاوب مع الشاشة */
       font-weight: 600;
-      cursor: pointer;
+      line-height: normal;
+      height: 6%;
       transition: color 0.3s, text-shadow 0.3s;
-      /* background: rgba(255,0,0,0.3); /* يمكنك تفعيل هذا السطر مؤقتاً لضبط الأماكن بدقة */
-    }
-    
-    @media (min-width: 450px) {
-      .link-btn { font-size: 16px; }
     }
 
     .link-btn:hover {
@@ -52,14 +56,14 @@
       text-shadow: 0 0 10px rgba(226, 201, 138, 0.8);
     }
 
-    /* ضبط أماكن الحقول بالنسبة المئوية لتطابق الصورة */
-    /* النسبة الأولى (top) للارتفاع، والثانية (left) للمسافة من اليسار بعد الأيقونة، و(width) لتغطية المساحة السوداء */
-    .btn-fb    { top: 70.8%; left: 24%; width: 33%; }
-    .btn-wa    { top: 78.2%; left: 29%; width: 33%; }
-    .btn-phone { top: 85.6%; left: 34%; width: 33%; }
-    .btn-home  { top: 93.0%; left: 39%; width: 33%; }
-    .btn-cart  { top: 100.4%; left: 44%; width: 33%; }
-    .btn-gps   { top: 107.8%; left: 49%; width: 33%; }
+    /* === الإحداثيات الدقيقة الجديدة === */
+    .btn-fb    { top: 48.0%; left: 24%; width: 33%; }
+    .btn-wa    { top: 55.5%; left: 29%; width: 33%; }
+    .btn-phone { top: 63.0%; left: 34%; width: 33%; }
+    .btn-home  { top: 70.5%; left: 39%; width: 33%; }
+    .btn-cart  { top: 78.0%; left: 44%; width: 33%; }
+    .btn-gps   { top: 85.5%; left: 49%; width: 33%; }
+
 
     /* تنسيق نافذة الفروع (Modal) */
     .modal {
@@ -74,6 +78,7 @@
       backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
+      line-height: normal; /* إعادة ضبط المسافات للنافذة */
     }
     .modal-content {
       background: linear-gradient(145deg, #1A1814, #0D0C0B);
@@ -128,32 +133,24 @@
 <body>
 
 <div class="wrapper">
-  <!-- تأكد إن اسم الصورة مطابق تماماً لاسم الملف اللي عندك -->
   <img src="land page.jpg" alt="استوديو الصباح" class="bg-image">
 
-  <!-- Facebook -->
   <a href="https://www.facebook.com/Tamer.Elsubbah.Photographer" target="_blank" class="link-btn btn-fb">صفحتنا على فيسبوك</a>
 
-  <!-- WhatsApp -->
   <a href="https://wa.me/201009892555" target="_blank" class="link-btn btn-wa">تواصل عبر واتساب</a>
 
-  <!-- Phone -->
   <a href="tel:+201009892555" class="link-btn btn-phone">اتصل بنا</a>
 
-  <!-- Home (Branches) -->
   <a href="javascript:void(0)" onclick="openModal()" class="link-btn btn-home">فروعنا</a>
 
-  <!-- Cart (Offers) -->
   <a href="#offers" class="link-btn btn-cart">أحدث العروض</a>
 
-  <!-- GPS (Location) -->
   <a href="https://maps.app.goo.gl/DGbyZXKT4fXRygFf6" target="_blank" class="link-btn btn-gps">عنوان المكان</a>
 </div>
 
-<!-- نافذة الفروع -->
 <div id="branchesModal" class="modal">
   <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <span class="close-btn" onclick="closeModal()">×</span>
     <h2>فروعنا</h2>
     <ul class="branches-list">
       <li><strong>شيبة:</strong> بجوار مركز الشباب</li>
@@ -165,7 +162,6 @@
 </div>
 
 <script>
-  // أكواد تشغيل وإغلاق نافذة الفروع
   var modal = document.getElementById("branchesModal");
 
   function openModal() {
@@ -176,7 +172,6 @@
     modal.style.display = "none";
   }
 
-  // إغلاق النافذة لو العميل ضغط في أي مساحة فاضية براها
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
