@@ -1,198 +1,187 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>استوديو الصباحitle>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استوديو الصباح | الروابط</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      background: #0a0a0c;
+      margin: 0;
+      padding: 0;
+      background-color: #111; /* لون خلفية غامق ليتماشى مع حواف الصورة */
+      font-family: 'Cairo', sans-serif;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
-
-    .page {
+    .wrapper {
       position: relative;
       width: 100%;
-      max-width: 430px;
-      aspect-ratio: 1152 / 2048;
-      margin: 0 auto;
+      max-width: 450px; /* مقاس شاشة الموبايل */
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
-
-    .page img.bg {
-      position: absolute;
-      inset: 0;
+    .bg-image {
       width: 100%;
-      height: 100%;
-      object-fit: fill;
       display: block;
-      user-select: none;
-      pointer-events: none;
     }
 
-    .overlay {
+    /* إعدادات النصوص داخل الحقول */
+    .link-btn {
       position: absolute;
-      inset: 0;
-    }
-
-    .btn {
-      position: absolute;
-      cursor: pointer;
+      height: 6%; /* ارتفاع الحقل ليتناسب مع التصميم */
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #E2C98A; /* لون ذهبي متناسق مع التصميم */
       text-decoration: none;
-      background: transparent;
-      border: none;
-      padding: 0;
+      font-size: 4vw; /* حجم خط متجاوب */
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s, text-shadow 0.3s;
+      /* background: rgba(255,0,0,0.3); /* يمكنك تفعيل هذا السطر مؤقتاً لضبط الأماكن بدقة */
+    }
+    
+    @media (min-width: 450px) {
+      .link-btn { font-size: 16px; }
     }
 
-    .btn-text {
-      font-family: 'Cairo', 'Segoe UI', sans-serif;
-      font-weight: 700;
-      color: rgba(220, 200, 150, 0.9);
-      letter-spacing: 1px;
-      font-size: clamp(11px, 2.6vw, 15px);
-      text-align: center;
-      width: 100%;
+    .link-btn:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(226, 201, 138, 0.8);
     }
 
-    /* مواضع الأزرار المعدلة */
-    .btn-fb {
-      top: 49.5%;
-      height: 5.5%;
-      right: 8%;
-      width: 68%;
-    }
-    .btn-wa {
-      top: 56%;
-      height: 5.5%;
-      right: 11%;
-      width: 68%;
-    }
-    .btn-call {
-      top: 62.5%;
-      height: 5.5%;
-      right: 14%;
-      width: 68%;
-    }
-    .btn-branches {
-      top: 69%;
-      height: 5.5%;
-      right: 17%;
-      width: 68%;
-    }
-    .btn-offers {
-      top: 75.5%;
-      height: 5.5%;
-      right: 20%;
-      width: 68%;
-    }
-    .btn-map {
-      top: 82%;
-      height: 5.5%;
-      right: 23%;
-      width: 68%;
-    }
+    /* ضبط أماكن الحقول بالنسبة المئوية لتطابق الصورة */
+    /* النسبة الأولى (top) للارتفاع، والثانية (left) للمسافة من اليسار بعد الأيقونة، و(width) لتغطية المساحة السوداء */
+    .btn-fb    { top: 50.8%; left: 24%; width: 33%; }
+    .btn-wa    { top: 58.2%; left: 29%; width: 33%; }
+    .btn-phone { top: 65.6%; left: 34%; width: 33%; }
+    .btn-home  { top: 73.0%; left: 39%; width: 33%; }
+    .btn-cart  { top: 80.4%; left: 44%; width: 33%; }
+    .btn-gps   { top: 87.8%; left: 49%; width: 33%; }
 
-    /* popup الفروع */
-    .branches-popup {
+    /* تنسيق نافذة الفروع (Modal) */
+    .modal {
       display: none;
-      position: absolute;
-      top: 75%;
-      right: 15%;
-      width: 70%;
-      background: rgba(10,8,6,.96);
-      border: 1px solid rgba(201,160,64,.4);
-      border-radius: 12px;
-      overflow: hidden;
-      z-index: 10;
-    }
-    .branches-popup.open { display: block; animation: slideDown .25s ease; }
-    @keyframes slideDown {
-      from { opacity:0; transform:translateY(-8px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .branch-item {
-      display: flex;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      justify-content: center;
       align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-bottom: 1px solid rgba(201,160,64,.12);
-      color: #d4cecc;
-      font-family: 'Cairo', sans-serif;
-      font-size: clamp(10px, 2.5vw, 14px);
-      text-align: right;
     }
-    .branch-item:last-child { border-bottom: none; }
-    .branch-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: #c9a040;
-      flex-shrink: 0;
+    .modal-content {
+      background: linear-gradient(145deg, #1A1814, #0D0C0B);
+      border: 1px solid #C9A96E;
+      border-radius: 15px;
+      width: 85%;
+      max-width: 350px;
+      padding: 30px 20px;
+      color: #D4CECC;
+      position: relative;
+      box-shadow: 0 0 25px rgba(201,169,110,0.15);
+      direction: rtl;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      color: #C9A96E;
+      font-size: 28px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .close-btn:hover { color: #fff; }
+    .modal h2 {
+      color: #C9A96E;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-family: 'Cairo', sans-serif;
+    }
+    .branches-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .branches-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .branches-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .branches-list strong {
+      color: #E2C98A;
+      margin-left: 5px;
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
-<div class="page">
-  <img class="bg" src="bg.png" alt="استوديو الصباح" />
+<div class="wrapper">
+  <!-- تأكد إن اسم الصورة مطابق تماماً لاسم الملف اللي عندك -->
+  <img src="land page.jpg" alt="استوديو الصباح" class="bg-image">
 
-  <div class="overlay">
+  <!-- Facebook -->
+  <a href="https://www.facebook.com/Tamer.Elsubbah.Photographer" target="_blank" class="link-btn btn-fb">صفحتنا على فيسبوك</a>
 
-    <a class="btn btn-fb"
-       href="https://www.facebook.com/Tamer.Elsubbah.Photographer"
-       target="_blank" rel="noopener">
-      <span class="btn-text">فيسبوك</span>
-    </a>
+  <!-- WhatsApp -->
+  <a href="https://wa.me/201009892555" target="_blank" class="link-btn btn-wa">تواصل عبر واتساب</a>
 
-    <a class="btn btn-wa"
-       href="https://wa.me/201009892555"
-       target="_blank" rel="noopener">
-      <span class="btn-text">واتساب</span>
-    </a>
+  <!-- Phone -->
+  <a href="tel:+201009892555" class="link-btn btn-phone">اتصل بنا</a>
 
-    <a class="btn btn-call" href="tel:+201009892555">
-      <span class="btn-text">اتصل بنا — 01009892555</span>
-    </a>
+  <!-- Home (Branches) -->
+  <a href="javascript:void(0)" onclick="openModal()" class="link-btn btn-home">فروعنا</a>
 
-    <button class="btn btn-branches" onclick="toggleBranches(event)">
-      <span class="btn-text">فروعنا</span>
-    </button>
+  <!-- Cart (Offers) -->
+  <a href="#offers" class="link-btn btn-cart">أحدث العروض</a>
 
-    <div class="branches-popup" id="branchesPopup">
-      <div class="branch-item"><span class="branch-dot"></span>شيبة — بجوار مركز الشباب</div>
-      <div class="branch-item"><span class="branch-dot"></span>بهنباي — أمام صيدلية الحجر</div>
-      <div class="branch-item"><span class="branch-dot"></span>النخاس — أمام مسجد الفتح</div>
-      <div class="branch-item"><span class="branch-dot"></span>القنايات — بجوار مسجد النصر</div>
-    </div>
+  <!-- GPS (Location) -->
+  <a href="https://maps.app.goo.gl/DGbyZXKT4fXRygFf6" target="_blank" class="link-btn btn-gps">عنوان المكان</a>
+</div>
 
-    <a class="btn btn-offers" href="#offers">
-      <span class="btn-text">أحدث العروض</span>
-    </a>
-
-    <a class="btn btn-map"
-       href="https://maps.app.goo.gl/DGbyZXKT4fXRygFf6"
-       target="_blank" rel="noopener">
-      <span class="btn-text">موقعنا على الخريطة</span>
-    </a>
-
+<!-- نافذة الفروع -->
+<div id="branchesModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2>فروعنا</h2>
+    <ul class="branches-list">
+      <li><strong>شيبة:</strong> بجوار مركز الشباب</li>
+      <li><strong>بهنباي:</strong> أمام صيدلية الحجر</li>
+      <li><strong>النخاس:</strong> أمام مسجد الفتح</li>
+      <li><strong>القنايات:</strong> بجوار مسجد النصر</li>
+    </ul>
   </div>
 </div>
 
 <script>
-  function toggleBranches(e) {
-    e.stopPropagation();
-    document.getElementById('branchesPopup').classList.toggle('open');
+  // أكواد تشغيل وإغلاق نافذة الفروع
+  var modal = document.getElementById("branchesModal");
+
+  function openModal() {
+    modal.style.display = "flex";
   }
-  document.addEventListener('click', function() {
-    document.getElementById('branchesPopup').classList.remove('open');
-  });
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  // إغلاق النافذة لو العميل ضغط في أي مساحة فاضية براها
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 </script>
 
 </body>
